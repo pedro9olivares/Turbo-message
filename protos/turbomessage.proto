@@ -1,0 +1,65 @@
+syntax = "proto3";
+package turbomessage;
+
+service ServidorTurboMessage {
+    // Admin de usuarios
+    rpc registrar_usuario (LoginRequest) returns (Status) {};
+    rpc login (LoginRequest) returns (Status) {};
+
+    // Enviar correo
+    rpc enviar_mensaje (EnviarMensajeRequest) returns (Status) {};
+
+    // Fetch bandejas
+    rpc get_bandeja (GetBandejaRequest) returns (Bandeja) {};
+
+    // Acciones con mensajes
+    rpc borrar_mensaje (MensajeActionRequest) returns (Status) {};
+    rpc marcar_leido (MensajeActionRequest) returns (Status) {};
+
+}
+
+message Empty {}
+
+message Status {
+    optional bool success = 1; 
+    optional string detalles = 2;
+}
+
+message LoginRequest {
+    optional string usuario = 1;
+    optional string passwd = 2;
+}
+
+message GetBandejaRequest {
+    optional string usuario = 1;
+    optional string token = 2;
+    optional string bandeja = 3; // Hacer enum
+}
+
+message MensajeActionRequest {
+    optional string usuario = 1;
+    optional string token = 2;
+    optional int32 correo_id = 3;
+    optional string bandeja = 4;
+}
+
+
+message EnviarMensajeRequest {
+    optional string usuario = 1;
+    optional string token = 2;
+    optional Correo correo = 3;
+}
+
+message Correo {
+    optional int32 id = 1;
+    optional string desde = 2;
+    optional string a = 3;
+    optional bool leido = 4;
+    optional string contenido = 5;
+}
+
+message Bandeja {
+    repeated Correo correos = 1;
+}
+
+
